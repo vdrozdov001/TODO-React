@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import Header from './components/header/header.js';
 import Form from './components/form/form.js';
+import EditIcon from './images/edit-icon.png';
+import DeleteIcon from './images/delete-icon.png';
+import CompleteIcon from './images/complete-icon.png';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -40,13 +43,17 @@ function App() {
   };
 
   const saveTodo = (id) => {
-    setTodos(todos.map(todo => {
-      if (todo.id === id) {
-        return { ...todo, text: currentText };
-      }
-      return todo;
-    }));
-    setEditingTodo(null);
+    if (currentText.trim()) {
+      setTodos(todos.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, text: currentText };
+        }
+        return todo;
+      }));
+      setEditingTodo(null);
+    } else {
+      alert('Текст не может быть пустым');
+    }
   };
 
   return (
@@ -64,6 +71,11 @@ function App() {
                   value={currentText}
                   onChange={handleTextChange}
                   onBlur={() => saveTodo(todo.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      saveTodo(todo.id);
+                    }
+                  }}
                 />
               ) : (
                 todo.text
@@ -72,9 +84,9 @@ function App() {
                 <button className="delete" onClick={e => {
                   e.stopPropagation();
                   removeTodo(todo.id);
-                }}>X</button>
-                <button className="complete" onClick={() => toggleTodo(todo.id)}>Complete</button>
-                <button className="edit" onClick={() => startEditing(todo)}>Edit</button>
+                }}><img src={DeleteIcon} alt="Удалить" /></button>
+                <img className="complete" src={CompleteIcon} onClick={() => toggleTodo(todo.id)} alt="Завершить" />
+                <img className="edit" onClick={() => startEditing(todo)} src={EditIcon} alt="Редактировать" />
               </div>
             </li>
           );

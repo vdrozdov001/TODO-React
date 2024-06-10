@@ -8,12 +8,13 @@ const Form = (props) => {
 
     const [value, setValue] = useState("")
     return ( 
-        <form onSubmit={e => { 
+        <form className="form" onSubmit={e => { 
             e.preventDefault();
             props.putTodo(value);
             setValue("");
         }}> 
             <input className="input" type="text" placeholder="Введите текст" value={value} onChange={e => setValue(e.target.value)}></input>
+            <button className="btn-ord">create</button>
         </form>
     )
 }
